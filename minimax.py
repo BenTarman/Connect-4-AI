@@ -1,7 +1,6 @@
 
 
 class MiniMax:
-
     def __init__(self, board):
         self.board = [x[:] for x in board]
 
@@ -32,22 +31,27 @@ class MiniMax:
 
     def bestMove(self, depth, state, currPlayer):
 
+        if self.gameOver(state):
+            return None 
+
+        if currPlayer == 1:
+            oppPlayer = 2
+        else:
+            oppPlayer = 1
+
         legalMoves = {}
         for col in range(7):
             if self.isValidMove(col, state):
                 tempMove = self.makeMove(state, col, currPlayer)
-                legalMoves[col] = self.searchStateSpace(depth - 1, tempMove, currPlayer)
+                legalMoves[col] = self.searchStateSpace(depth - 1, tempMove,
+                                                        oppPlayer)
 
-        best_alpha = 9999
-        best_move = None
         moves = legalMoves.items()
- #      random.shuffle(list(moves))
+        answ = []
         for move, alpha in moves:
-            if alpha <= best_alpha:
-                best_alpha = alpha
-                best_move = move
+            answ.append(alpha)
 
-        return best_move, best_alpha
+        return answ.index(min(answ))
 
 
 
@@ -60,24 +64,44 @@ class MiniMax:
                 legalMoves.append(temp)
 
         if depth == 0 or len(legalMoves) == 0 or self.gameOver(state):
-            return self.eval(state, currPlayer)
+            return self.eval(state, currPlayer, depth)
 
-        alpha = 9999
+
+        if currPlayer == 1:
+            oppPlayer = 2
+        else:
+            oppPlayer = 1
+
+        alpha = float('-inf')
         for child in legalMoves:
             if child == None:
                 print "child == None (search)"
-            alpha = max(alpha, self.searchStateSpace(depth-1, child, currPlayer))
+            alpha = max(alpha, -self.searchStateSpace(depth-1, child, oppPlayer))
         return alpha
 
 
 
 
-    def eval(self, state, currPlayer):
+    def eval(self, state, currPlayer, depth):
+
+        if currPlayer == 1:
+            oppPlayer = 2
+        else:
+            oppPlayer = 1
+
         numFours = self.findStreak(state, currPlayer, 4)
         numThrees = self.findStreak(state, currPlayer, 3)
         numTwos = self.findStreak(state, currPlayer, 2)
 
-        return numFours * 1000 + numThrees * 10 + numTwos;
+        humFours = self.findStreak(state, oppPlayer, 4)
+        humThrees= self.findStreak(state, oppPlayer, 3)
+        humTwos= self.findStreak(state, oppPlayer, 2)
+
+        if humFours > 0:
+            return -100000 - depth
+
+        return (numFours * 100000 + numThrees * 100 + numTwos) - (humThrees*100
+                                                        + humTwos) + depth
 
     def findStreak(self, state, currPlayer, streak):
         count = 0

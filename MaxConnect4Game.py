@@ -52,11 +52,8 @@ class maxConnect4Game:
 
     # The AI section. Currently plays randomly.
     def aiPlay(self):
-        randColumn = random.randrange(0,7)
-        #result = self.playPiece(randColumn)
-
         m = MiniMax(self.gameBoard)
-        best_move = m.bestMove(6, self.gameBoard, self.currentTurn)
+        best_move = m.bestMove(5, self.gameBoard, self.currentTurn)
 
         print("best move: ", best_move)
 
