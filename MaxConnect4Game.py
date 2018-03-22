@@ -49,13 +49,24 @@ class maxConnect4Game:
                     self.pieceCount += 1
                     return 1
 
+    def humanPlay(self):
+        col = input("type column number you want to play (1-7): ")
+        self.playPiece(col - 1)
+
+        if self.currentTurn == 1:
+            self.currentTurn = 2
+        elif self.currentTurn == 2:
+            self.currentTurn = 1
+
+
 
     # The AI section. Currently plays randomly.
     def aiPlay(self):
         m = MiniMax(self.gameBoard)
         best_move = m.bestMove(5, self.gameBoard, self.currentTurn)
 
-        print("best move: ", best_move)
+        #print("best move: ", best_move)
+        self.playPiece(best_move)
 
 
 #        print('\n\nmove %d: Player %d, column %d\n' % (self.pieceCount, self.currentTurn, randColumn+1))

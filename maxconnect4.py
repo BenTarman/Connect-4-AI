@@ -25,9 +25,23 @@ def oneMoveGame(currentGame):
 
 
 def interactiveGame(currentGame):
-    # Fill me in
-    sys.exit('Interactive mode is currently not implemented')
 
+    while currentGame.pieceCount != 42:
+        #mongrel human
+        currentGame.humanPlay()
+        print 'Game state after move:'
+        currentGame.printGameBoard()
+
+        #chad AI
+        currentGame.aiPlay() # Make a move (only random is implemented)
+        print 'Game state after move:'
+        currentGame.printGameBoard()
+
+        #print score
+        print('Score: Player 1 = %d, Player 2 = %d\n' % (currentGame.player1Score, currentGame.player2Score))
+
+    print 'BOARD FULL\n\nGame Over!\n'
+    sys.exit(0)
 
 def main(argv):
     # Make sure we have enough command-line arguments

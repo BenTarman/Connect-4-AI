@@ -31,8 +31,8 @@ class MiniMax:
 
     def bestMove(self, depth, state, currPlayer):
 
-        if self.gameOver(state):
-            return None 
+        #if self.gameOver(state):
+        #    return None 
 
         if currPlayer == 1:
             oppPlayer = 2
@@ -53,6 +53,33 @@ class MiniMax:
 
         return answ.index(min(answ))
 
+
+    def maxMove(self, depth, state, currPlayer, alpha, beta):
+        legalMoves = []
+
+        for i in range(7):
+            if self.isValidMove(i, state):
+                temp = self.makeMove(state, i, currPlayer)
+                legalMoves.append(temp)
+
+        if depth == 0 or len(legalMoves) == 0 or self.gameOver(state):
+            return self.eval(state, currPlayer, depth)
+
+
+        if currPlayer == 1:
+            oppPlayer = 2
+        else:
+            oppPlayer = 1
+
+        for child in legalMoves:
+            move = minMove(depth -1 , child, oppPlayer, alpha, beta)
+            if self.eval(move) > self.eval(best_move):
+                best_move = move
+                alpha = self.eval(move)
+            if (beta > alpha):
+                return best_move
+
+        return best_move
 
 
     def searchStateSpace(self, depth, state, currPlayer):
